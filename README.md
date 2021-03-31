@@ -32,17 +32,18 @@ According to this setup, you will need the following cables: a XRL cable (female
    
 ## Preparing the audio files for the recording session
 You will need to do some preparations for the recording session. You will add some "beep" signals to the original sentences in order to indicate to the talker that a sentence is coming. This is fairly easy, but you need to remember how you did it for the post-processing of the recordings. You can choose your own method for doing this. In the following example, three 200ms beeps, each separated by 1 second, are played before the sentence repetitions. The sentence is repeated four times. The following code has been written for Matlab:
-```
+```MATLAB
 % Read audio file
 [ss, fs] = audioread('<audio file name>');
 % Chose one stereo channel
 ss = ss(:,1);
 
 % Create three beeps signal
-durationBeep = 0.2;
-distanceBeeps = 1;
-beepFreq = 440;
+durationBeep = 0.2; % seconds
+distanceBeeps = 1; % seconds
+beepFreq = 440; % Hz
 beep = sin(2*pi*beepFreq*(0:1/fs:(durationBeep-1/fs)));
+% Add silence between beeps and concatenate beeps
 beepSignal = [beep zeros(1,fs*(distanceBeeps - durationBeep)) beep zeros(1,fs*(distanceBeeps - durationBeep)) beep zeros(1,fs*(distanceBeeps - durationBeep))];
 % sound(beepSignal, fs); % Check how the beep signal sounds
 
