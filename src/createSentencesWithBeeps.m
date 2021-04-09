@@ -40,8 +40,9 @@ function createSentencesWithBeeps(originalSentencesPath, beepSentencesPath)
     %sound(beep_4ss, fs);
 
     % Store the signal to be used during the recording
-    audiowrite([beepSentencesPath, '/', filename,'_withBeeps.wav'],  beep_4ss, fs);
+    audiowrite([beepSentencesPath, '/', erase(filename, '.wav'),'_withBeeps.wav'],  beep_4ss, fs);
 
   end
 
+  disp(['Sentences with beeps created!']);
 end
