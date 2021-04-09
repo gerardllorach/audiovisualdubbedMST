@@ -16,7 +16,7 @@ The camera needs to record two audio inputs at the same time: one from the talke
 - Computer audio output -> (3.5mm jack splitter male -- 3.5mm jack splitter female 2) <- earphone to the talker
 - Zoom line out -> (3.5mm jack male -- 3.5mm jack male) <- Camera audio input
 
-According to this setup, you will need the following cables: a XRL cable (female-male), a 3.5mm jack splitter (1 male-2 female), a jack from mini to normal (3.5mm jack male - 6.35mm jack male), a 3.5mm jack (male-male).
+According to this setup, you will need the following cables: a XRL cable (female-male), a 3.5mm jack splitter (1 male-2 female), a jack from mini to normal (3.5mm jack male - 6.35mm jack male), and a 3.5mm jack (male-male). You will probably need an extension cable for the earphones (3.5mm jack male-female).
 
 ### Recording settings
 - Camera:
