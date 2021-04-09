@@ -1,8 +1,8 @@
 
-function playSentencesForRecording()
+function playSentencesForRecording(beepAudiosPath)
 
     % Read all filenames
-    audioFilenames = dir('src/beepAudios/*.wav');
+    audioFilenames = dir([beepAudiosPath,'/*.wav']);
     cellFiles = struct2cell(audioFilenames);
     listFilenames = cellFiles(1,:);
 
@@ -135,7 +135,7 @@ function playSentence(src, event, index)
     pause(length(ss)/fs);
     % Log what was played
     time = datestr(datetime(), 'yyyy.mm.dd_HH.MM.SS');
-    fileID = fopen('src/recordingLogs.txt','a');
+    fileID = fopen('recordingLogs.txt','a');
     fprintf(fileID, [time, ', ', sentenceCode, '\r\n']);
     fclose(fileID);
     

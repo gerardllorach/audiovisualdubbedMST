@@ -9,6 +9,8 @@ createSentencesWithBeeps('D:\Oldenburg\AVOLSA_Masked_Experiment\molsa\Stimuli\fe
 
 
 %% Play the sentences for the recording session
+% A GUI will open with some basic buttons. Every time a sentence is played,
+% an entry will be written to recordingLogs.txt with a date, time and
+% sentence code.
 addpath('src')
-
-playSentencesForRecording();
+playSentencesForRecording('src/beepAudios');
