@@ -86,5 +86,5 @@ Before playing each sentence, it is useful to display the code name and take of 
 
 You can use a script to play the sentences or just an audio player, like VLC. The script "playSentencesForRecording.m" is prepared to play the sentences. You can select a specific sentence to play and keep going through all the sentences with a GUI. A log is written everytime you play a sentence with the date and time. This log might be useful when going through the videos, as you will be able to infer where the sentences are the video sequences.
 
-# Instructions for the talker during the recording
+### Instructions for the talker during the recording
 Keep the mouth closed before and after each sentence. Keep a neutral face. Do not change the prosody (intonation).
