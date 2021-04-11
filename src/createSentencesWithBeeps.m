@@ -5,42 +5,51 @@
 
 function createSentencesWithBeeps(originalSentencesPath, beepSentencesPath)
 
+  globalVariables;
+  
   % Get the filenames of the original audio
-  originalSentencesNames = dir(strcat(originalSentencesPath,'/*.wav'));
+  originalSentencesNames = dir(strcat(originalSentencesPath,'*.wav'));
 
   % Iterate the filenames
   for i = 1:length(originalSentencesNames)
-    % Get filename of i sentence
+    % Get filename and sentence code of i sentence
     filename = originalSentencesNames(i).name;
+    sentenceCode = erase(filename, '.wav');
+    
+    % If sentenceCode does not contain a sentence code ('84651')
+    if (isnan(str2double(sentenceCode)))
+        disp(['Filename ', sentenceCode , ' is not correct, it should be 5 digits.']);
+        continue;
+    end
 
     % Read audio file
-    [ss, fs] = audioread([originalSentencesPath, '/', filename]); % '05126.wav' for example
+    [ss, fs] = audioread([originalSentencesPath, filename]); % '05126.wav' for example
     % Chose one stereo channel
     ss = ss(:,1);
 
     % Create three beeps signal
-    durationBeep = 0.2; % seconds
-    distanceBeeps = 1; % seconds
-    amplitude = 0.2; % Amplitude of the beep signal
-    beepFreq = 440; % Hz
-    % Create sinusoid beep signal
-    beep = amplitude * sin(2*pi*beepFreq*(0:1/fs:(durationBeep-1/fs)));
-    % Add silence between beeps and concatenate beeps
-    beepSignal = [beep zeros(1,fs*(distanceBeeps - durationBeep)) beep zeros(1,fs*(distanceBeeps - durationBeep)) beep zeros(1,fs*(distanceBeeps - durationBeep))];
-    % Check how the beep signal sounds
-    % sound(beepSignal, fs);
+    beepSignal = createBeeps(fs);
 
     % Add three beeps before sentence starts
     beep_ss = [beepSignal ss'];
 
     % Repeate the sentence four times
-    beep_4ss = [beep_ss zeros(1,fs) ss' zeros(1,fs) ss' zeros(1,fs) ss' zeros(1,fs)]; % 1 second silence at the end
+    silenceBetweenRepetitions = zeros(1,fs*silenceBetweenSentenceRepetitionsDuration);
+    beep_4ss = [beep_ss zeros(1,fs) ss' silenceBetweenRepetitions...
+                                    ss' silenceBetweenRepetitions...
+                                    ss' silenceBetweenRepetitions]; % 1 second silence at the end
+    
+    % Encode the signal code into an audio signal
+    sentenceCodeAudio = morseEncode(sentenceCode, fs);
+    
+    % Add to signal
+    sCode_beep_4ss = [sentenceCodeAudio beep_4ss];
 
     % Check how the final signal sounds
-    %sound(beep_4ss, fs);
+    %sound(sCode_beep_4ss, fs);
 
     % Store the signal to be used during the recording
-    audiowrite([beepSentencesPath, '/', erase(filename, '.wav'),'_withBeeps.wav'],  beep_4ss, fs);
+    audiowrite([beepSentencesPath, sentenceCode,'_withBeeps.wav'],  sCode_beep_4ss, fs);
 
   end
 

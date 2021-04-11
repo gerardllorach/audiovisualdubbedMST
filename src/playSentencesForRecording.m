@@ -1,8 +1,73 @@
 
 function playSentencesForRecording(beepAudiosPath)
-
+    % Add path
+    addpath(beepAudiosPath);
     % Read all filenames
     audioFilenames = dir([beepAudiosPath,'/*.wav']);
+    % Create GUI and functionalities
+    startGUI(audioFilenames);
+    
+end
+
+
+function playSentence(src, event, index)
+
+    % Get data
+    GUIData = get(src, 'UserData');
+     % Hide buttons
+    hidePlayReplayBtns(GUIData);
+    
+    % Get the audio name
+    audioName = (GUIData.audioFilenames(index).name);
+    sentenceCode = erase(audioName, '_withBeeps.wav');
+    
+    % Display current sentence
+    GUIData.currentSentenceText.String = ['Playing ', sentenceCode];
+    GUIData.currentSentenceText.Visible = 'On';
+    GUIData.stopSoundBtn.Visible = 'On';
+    
+    % Audio read and play
+    [ss, fs] = audioread(audioName);
+    sound(ss, fs);
+    % Wait until sentence is finished
+    pause(length(ss)/fs);
+    % Log what was played
+    time = datestr(datetime(), 'yyyy.mm.dd_HH.MM.SS');
+    fileID = fopen('recordingLogs.txt','a');
+    fprintf(fileID, [time, ', ', sentenceCode, '\r\n']);
+    fclose(fileID);
+    
+    
+    % Show/Hide buttons
+    GUIData.currentSentenceText.Visible = 'Off';
+    GUIData.stopSoundBtn.Visible = 'Off';
+    % Replay
+    GUIData.replayBtn.Visible = 'On';
+    GUIData.replayText.String = ['Previous: ', sentenceCode];
+    GUIData.replayText.Visible = 'On';
+    % Callback
+    GUIData.replayBtn.Callback = {@playSentence,index};
+    
+    % Play next
+    if (index+1 < length(GUIData.audioFilenames)) % Not at the end
+        GUIData.playNextBtn.Visible = 'On';
+        GUIData.playNextText.String = ['Next: ', erase(GUIData.audioFilenames(index+1).name, '_withBeeps.wav')];
+        GUIData.playNextText.Visible = 'On';
+        % Callback
+        GUIData.playNextBtn.Callback = {@playSentence,index+1};
+    end
+    
+    % Back
+    GUIData.backBtn.Visible = 'On';
+    
+end
+
+
+
+
+% Creates GUI and functionalities
+function startGUI(audioFilenames)
+    % Options for the dropdown menu
     cellFiles = struct2cell(audioFilenames);
     listFilenames = cellFiles(1,:);
 
@@ -62,8 +127,6 @@ function playSentencesForRecording(beepAudiosPath)
     GUIData.exitBtn.UserData = GUIData;
 end
 
-
-
 % Start button clicked callback
 function start(src, event)
     % Get data
@@ -112,57 +175,7 @@ end
 
 
 
-function playSentence(src, event, index)
 
-    % Get data
-    GUIData = get(src, 'UserData');
-     % Hide buttons
-    hidePlayReplayBtns(GUIData);
-    
-    % Get the audio name
-    audioName = (GUIData.audioFilenames(index).name);
-    sentenceCode = erase(audioName, '_withBeeps.wav');
-    
-    % Display current sentence
-    GUIData.currentSentenceText.String = ['Playing ', sentenceCode];
-    GUIData.currentSentenceText.Visible = 'On';
-    GUIData.stopSoundBtn.Visible = 'On';
-    
-    % Audio read and play
-    [ss, fs] = audioread(audioName);
-    sound(ss, fs);
-    % Wait until sentence is finished
-    pause(length(ss)/fs);
-    % Log what was played
-    time = datestr(datetime(), 'yyyy.mm.dd_HH.MM.SS');
-    fileID = fopen('recordingLogs.txt','a');
-    fprintf(fileID, [time, ', ', sentenceCode, '\r\n']);
-    fclose(fileID);
-    
-    
-    % Show/Hide buttons
-    GUIData.currentSentenceText.Visible = 'Off';
-    GUIData.stopSoundBtn.Visible = 'Off';
-    % Replay
-    GUIData.replayBtn.Visible = 'On';
-    GUIData.replayText.String = ['Previous: ', sentenceCode];
-    GUIData.replayText.Visible = 'On';
-    % Callback
-    GUIData.replayBtn.Callback = {@playSentence,index};
-    
-    % Play next
-    if (index+1 < length(GUIData.audioFilenames)) % Not at the end
-        GUIData.playNextBtn.Visible = 'On';
-        GUIData.playNextText.String = ['Next: ', erase(GUIData.audioFilenames(index+1).name, '_withBeeps.wav')];
-        GUIData.playNextText.Visible = 'On';
-        % Callback
-        GUIData.playNextBtn.Callback = {@playSentence,index+1};
-    end
-    
-    % Back
-    GUIData.backBtn.Visible = 'On';
-    
-end
 
 
 
