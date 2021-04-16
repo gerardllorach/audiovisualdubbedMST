@@ -27,7 +27,7 @@ morseNumbers = { '-----', ... %0
                  '----.'};     %9
 % 
 % freqBands = [315, 690, 1111, 1560, 1991];
-freqBands = [690, 1111, 1560, 1991, 2687];
+freqBands = [500, 1111, 1560, 1991, 2687];
 dotDuration = 0.015; %s
 dashDuration = 0.030; %s
 pauseDuration = 0.020; %s
