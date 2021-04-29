@@ -24,25 +24,13 @@ playSentencesForRecording('src/beepAudios');
 % the audio file the start and end of each take/sentence repetition. The
 % script finds the starts and ends and creates new files for each sentence
 % repetition in a given folder.
+% You need to install ffmpeg for this (https://ffmpeg.org/)
 addpath('src');
 % cutAudios(channelSentenceWithBeeps, pathVideos, pathOriginalAudios, pathCutAudios)
-cutAudios(1, '', 'D:\Oldenburg\AVOLSA_Masked_Experiment\molsa\Stimuli\female\dithered\', 'src/cutAudios/');
+cutVideos(1, '', 'D:\Oldenburg\AVOLSA_Masked_Experiment\molsa\Stimuli\female\dithered\', 'src/cutVideos/');
 
 
 %% Test Morse Encoder/Decoder
-
+% Takes many hours. It checks that the encoded signal can be decoded
 addpath('src')
-sentenceCode = ''; % '59782';
-for i = 0:99999
-    sentenceCode(1) = num2str(floor(i/1e4));
-    sentenceCode(2) = num2str(floor(i/1e3) - floor(i/1e4)*10);
-    sentenceCode(3) = num2str(floor(i/1e2) - floor(i/1e3)*10);
-    sentenceCode(4) = num2str(floor(i/1e1) - floor(i/1e2)*10);
-    sentenceCode(5) = num2str(floor(i/1e0) - floor(i/1e1)*10);
-
-     fs = 44100;
-     signal = morseEncode(sentenceCode, fs);
-     %sound(signal, fs);
-     result = morseDecode(signal,fs);
-     disp(['Original: ', sentenceCode, ', Result: ', result]);
-end
+testMorse()

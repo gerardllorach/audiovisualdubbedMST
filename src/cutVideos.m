@@ -1,4 +1,4 @@
-function cutAudios(channelSentenceWithBeeps, pathVideos, pathOriginalAudios, pathCutAudios)
+function cutVideos(channelSentenceWithBeeps, pathVideos, pathOriginalAudios, pathCutVideos)
     % channelSentenceWithBeeps -> 1 channel L, 2 channel R
 
     close all
@@ -52,6 +52,8 @@ function cutAudios(channelSentenceWithBeeps, pathVideos, pathOriginalAudios, pat
                                    ' Your answer should be 5 digits, e.g. 01248.'], 'Sentence code');
                 sentenceCode = myCell{1}; 
             end
+            % Check if a take from this sentence exists
+            
             % Find sentence duration
             filePathAndName = [pathOriginalAudios, '\',sentenceCode, '.wav'];
             % If file does not exist, let the user fill it
@@ -68,9 +70,23 @@ function cutAudios(channelSentenceWithBeeps, pathVideos, pathOriginalAudios, pat
                 startIdx = takesStartIdxs(j) + k*sentenceDuration*fs + k*silenceBetweenSentenceRepetitionsDuration*fs - timeCutBeforeStart*fs;
                 endIdx = takesStartIdxs(j) + (k+1)*sentenceDuration*fs + k*silenceBetweenSentenceRepetitionsDuration*fs + timeCutAfterEnd*fs;
                 % Cut the videos according to the sentence duration
-                % TODO: cut video
                 % TODO: check for Take number
-                audiowrite([pathCutAudios, sentenceCode, '_Take1_Repetition', num2str(k), '.wav'], ssVideo(round(startIdx):round(endIdx), :), fs);
+                % ffmpeg command
+                % ffmpeg -i inputvideo.mp4 -ss 00:56:34 -t 00:00:22 -c clip.mp4
+                % https://ffmpeg.org/ffmpeg-utils.html#time-duration-syntax
+                % system('ffmpeg -i testVideo.mkv -ss 0ms -t 1000ms test.mp4')
+                vidExtension = '.mp4';
+                vidOutName = [sentenceCode, '_Take1_Repetition', num2str(k), vidExtension];
+                startTime = startIdx/fs; % Start time in seconds
+                vidDuration = timeCutBeforeStart + sentenceDuration + 0.2; % Duration in seconds
+                
+                [status, cmdout] = system(['ffmpeg -i ',videoFiles(i).folder, '\',videoFiles(i).name,...
+                    ' -ss ', num2str(floor(startTime*1000)) ,'ms -t ', num2str(floor(vidDuration*1000)) ,'ms ',...
+                    pathCutVideos, vidOutName]);
+                
+                % Write the audios
+                % TODO: check for Take number
+                audiowrite([pathCutVideos, sentenceCode, '_Take1_Repetition', num2str(k), '.wav'], ssVideo(round(startIdx):round(endIdx), :), fs);
             end
 
         end
