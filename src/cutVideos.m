@@ -31,9 +31,10 @@ function cutVideos(channelSentenceWithBeeps, pathVideos, pathOriginalAudios, pat
         % Find peaks (separated by at least 8 seconds, i.e. each take lasts 3*4 seconds + pause in between)
         [peaks, locs] = findpeaks(abs(acor), lag, 'MinPeakDistance',fs*8, 'MinPeakHeight', maxCorr*0.8);
         findpeaks(abs(acor), lag, 'MinPeakDistance',fs*8, 'MinPeakHeight', maxCorr*0.8); % Plot the peaks
-        disp([num2str(length(locs)), ' takes found (three beeps signal).']);
+        title(['Location of the takes in the video file ', videoFiles(i).name]);
+        disp([num2str(length(locs)), ' takes found (three beeps signal) in video ',videoFiles(i).name]);
 
-        % Cutting locations in samples for each take (4 sentence
+        % Cutting locations in samples for each take (1 take = 4 sentence
         % repetitions)
         % beep beep beep (takesStartIdxs) SENTENCE SENTENCE SENTENCE SENTENCE
         takesStartIdxs = locs + length(beepSignal);
@@ -52,13 +53,16 @@ function cutVideos(channelSentenceWithBeeps, pathVideos, pathOriginalAudios, pat
                                    ' Your answer should be 5 digits, e.g. 01248.'], 'Sentence code');
                 sentenceCode = myCell{1}; 
             end
-            % Check if a take from this sentence exists
+            % Check if other takes from this sentence exist and find the
+            % current take number
+            takeNum = getCurrentTake(sentenceCode, pathCutVideos);
+            
             
             % Find sentence duration
-            filePathAndName = [pathOriginalAudios, '\',sentenceCode, '.wav'];
+            filePathAndName = [pathOriginalAudios, sentenceCode, '.wav'];
             % If file does not exist, let the user fill it
             if (exist(filePathAndName, 'file') == 0)
-                disp(['File ', sentenceCode, ' does not exist', filePathAndName]);
+                disp(['File ', sentenceCode, ' does not exist: ', filePathAndName]);
                 continue;
             end
             [originalSentence, fsOriginal] = audioread(filePathAndName);
@@ -76,7 +80,7 @@ function cutVideos(channelSentenceWithBeeps, pathVideos, pathOriginalAudios, pat
                 % https://ffmpeg.org/ffmpeg-utils.html#time-duration-syntax
                 % system('ffmpeg -i testVideo.mkv -ss 0ms -t 1000ms test.mp4')
                 vidExtension = '.mp4';
-                vidOutName = [sentenceCode, '_Take1_Repetition', num2str(k), vidExtension];
+                vidOutName = [sentenceCode, '_Take', num2str(takeNum),'_Repetition', num2str(k), vidExtension];
                 startTime = startIdx/fs; % Start time in seconds
                 vidDuration = timeCutBeforeStart + sentenceDuration + 0.2; % Duration in seconds
                 
@@ -93,5 +97,28 @@ function cutVideos(channelSentenceWithBeeps, pathVideos, pathOriginalAudios, pat
 
     end
 
+end
+
+% Video cuts are named as "02064_Take1_Repetition1.mp4"
+function takeNum = getCurrentTake(sentenceCode, pathCutVideos)
+    files = dir([pathCutVideos, sentenceCode,'_Take*.mp4']);
+    % If no take exists, it is the first one
+    if(length(files) == 0)
+        takeNum = 1;
+        return;
+    end
+    % Iterate through all takes and find the biggest number
+    lastTakeNum = 0;
+    for i = 1:length(files)
+        fname = files(i).name;
+        tmp = strsplit(fname, 'Take');
+        tmp = strsplit(tmp{2}, '_');
+        currentTakeNum = str2num(tmp{1});
+        if (currentTakeNum > lastTakeNum)
+            lastTakeNum = currentTakeNum;
+        end
+    end
+    takeNum = lastTakeNum + 1;
+    return;
 end
 
