@@ -55,8 +55,8 @@ addpath('src');
 addpath('sap-voicebox-master/voicebox'); % voicebox path
 
 % getAsyncScoresForAll(pathCutAudios);
-getAsyncScoresForAll('src/cutVideos/');
-
+asyncTable = getAsyncScoresForAll('src/cutVideos/');
+% TODO: select the best
 
 %% Test Morse Encoder/Decoder
 % Takes many hours. It checks that the encoded signal can be decoded
