@@ -1,4 +1,4 @@
-function [asyncScore, asyncOverTime] = computeAsyncScore(signal, fs, channelOriginal)
+function [asyncScore, asyncOverTime] = computeAsyncScore(signal, fs, channelOriginal, sentenceName)
 
 % Separate signals
 ssOriginal = signal(:, channelOriginal);
@@ -37,13 +37,13 @@ maxVidBehind = min(asyncOverTime); % Below -45 ms is noticed
 maxVidAhead = max(asyncOverTime); % Above 200 ms is noticed
 
 % Plot asynchrony over time
-plotAsync(asyncOverTime, asyncScore, maxVidBehind, maxVidAhead, frame2sec)
+plotAsync(asyncOverTime, asyncScore, maxVidBehind, maxVidAhead, frame2sec, sentenceName)
 
 end
 
 
 % Plot the asynchrony score with thresholds
-function plotAsync(asyncOverTime, asyncScore, maxVidBehind, maxVidAhead, frame2sec)
+function plotAsync(asyncOverTime, asyncScore, maxVidBehind, maxVidAhead, frame2sec, sentenceName)
 
 % Inside thresholds
 inSafeRange = asyncOverTime; % Async is inside the safe range
@@ -66,7 +66,7 @@ hold off
 
 %figure
 %plot( frame2sec * (1:length(asyncOverTime)), asyncOverTime, 'LineWidth', 2, 'Color', 'red');
-title({'Asynchrony over time',...
+title({['Asynchrony over time for ', sentenceName],...
     ['Asynchrony score: ', num2str(asyncScore, '%.3f'),'s '],...
     ['Video ahead: ',num2str(maxVidAhead, '%.3f'), 's. Video behind: ', num2str(maxVidBehind, '%.3f'), 's.']});
 ylabel('Asynchrony in seconds');

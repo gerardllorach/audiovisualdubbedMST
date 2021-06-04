@@ -28,9 +28,31 @@ function playSentence(src, event, index)
     
     % Audio read and play
     [ss, fs] = audioread(audioName);
-    sound(ss, fs);
+    % Visualize audio envelope
+    axes('Position',[0.1, 0.2, 0.8, 0.4]); % Position
+    tt = (0:1/fs:length(ss)/fs -1/fs); % Time array
+    ssPlot = plot(tt, ss); % Plot
+    xlabel('Seconds')
+    
+    % Play sound
+    ssplayer = audioplayer(ss, fs);
+    GUIData.stopSoundBtn.Callback = {@stopSentence, ssplayer};
+    ssplayer.play();
+
+    ssPlot = plot(tt, ss, 'b'); % Plot
     % Wait until sentence is finished
-    pause(length(ss)/fs);
+    while(ssplayer.isplaying())
+        % Update plot
+        currentSample = ssplayer.CurrentSample;
+        ssPlot = plot(tt, ss, 'b'); % Plot
+        hold on
+        plot(tt(1:currentSample), ss(1:currentSample), 'r'); % Plot
+        plot([currentSample/fs,currentSample/fs], [-0.5,0.5], 'LineWidth', 2, 'Color', 'g'); %xline(currentSample, 'LineWidth', 2, 'Color', 'b');
+        pause(0.050);
+        hold off
+    end
+    
+    
     % Log what was played
     time = datestr(datetime(), 'yyyy.mm.dd_HH.MM.SS');
     fileID = fopen('recordingLogs.txt','a');
@@ -39,6 +61,7 @@ function playSentence(src, event, index)
     
     
     % Show/Hide buttons
+    delete(ssPlot.Parent) % Remove plot
     GUIData.currentSentenceText.Visible = 'Off';
     GUIData.stopSoundBtn.Visible = 'Off';
     % Replay
@@ -62,10 +85,16 @@ function playSentence(src, event, index)
     
 end
 
-
+% Stop the sentence audio playback
+function stopSentence(src, event, ssplayer)
+    % Stop sound
+    ssplayer.pause();
+end
 
 
 % Creates GUI and functionalities
+% https://www.mathworks.com/help/matlab/ref/uicontrol.html
+% https://www.mathworks.com/help/matlab/ref/matlab.ui.control.uicontrol-properties.html
 function startGUI(audioFilenames)
     % Options for the dropdown menu
     cellFiles = struct2cell(audioFilenames);
@@ -83,18 +112,24 @@ function startGUI(audioFilenames)
     
     % GUI data for the callbacks
     GUIData = struct('audioFilenames', audioFilenames);
-    % Start button
+    % Start interface
     GUIData.startBtn = uicontrol('Style', 'pushbutton', 'String', 'Start',...
             'Position', [width/3, height/2 + textHeight*1.2, width/3, textHeight], 'FontSize', fontSize);
     GUIData.listSentencesBtn = uicontrol('Style', 'popupmenu', 'String', listFilenames,...
             'Position', [width/3, height/2, width/3, textHeight], 'FontSize', fontSize*0.5);
         
+        
+    % Playing sentence
     % Current sentence text
     GUIData.currentSentenceText = uicontrol('Style', 'text', 'String', ['Playing '],'Visible', 'Off',...
-            'Position', [width/4, height/2, width/2, textHeight*4], 'FontSize', fontSize*2);
+            'Position', [width/4, height/1.5, width/2, textHeight*4], 'FontSize', fontSize*2);
+    % Audio waveform    
+    
+    % Stop button
     GUIData.stopSoundBtn = uicontrol('Style', 'pushbutton', 'String', 'Stop sound (and wait)', 'Visible', 'Off',...
         'Position', [width/3, textHeight, width/3, textHeight], 'FontSize', fontSize);
 
+    
     % Replay sentence
     GUIData.replayText = uicontrol('Style', 'text', 'String', ['Previous sentence: '],'Visible', 'Off',...
             'Position', [width/4, 2*height/3 + textHeight*1.2, width/2, textHeight], 'FontSize', fontSize);
@@ -117,7 +152,6 @@ function startGUI(audioFilenames)
     GUIData.startBtn.Callback = @start;
     GUIData.backBtn.Callback = @back;
     GUIData.exitBtn.Callback = 'close all';
-    GUIData.stopSoundBtn.Callback = 'clear sound';
 
     % UserData for callbacks
     GUIData.startBtn.UserData = GUIData;

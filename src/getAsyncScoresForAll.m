@@ -13,7 +13,7 @@ for i=1:length(files)
     
     %[ss, fs] = audioread('src/cutVideos/02064_Take1_Repetition2.wav');
     [ss, fs] = audioread([pathCutAudios, files(i).name]);
-    [asyncScore, asyncOverTime] = computeAsyncScore(ss, fs, 1);
+    [asyncScore, asyncOverTime] = computeAsyncScore(ss, fs, 1, files(i).name);
 
     % Store variables
     fileNames(i) = {files(i).name};

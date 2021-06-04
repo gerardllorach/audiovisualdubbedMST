@@ -15,7 +15,7 @@ function cutVideos(channelSentenceWithBeeps, pathVideos, pathOriginalAudios, pat
     % Iterate through video files
     for i = 1:length(videoFiles)
         % Get audio tracks
-        [ssVideo, fs] = audioread(videoFiles(i).name);
+        [ssVideo, fs] = audioread([pathVideos, videoFiles(i).name]);
         % Choose the right audio channel (one with beeps, one with the audio
         % from the recording session)
         ss = ssVideo(:,channelSentenceWithBeeps); % 1 channel L, 2 channel R
@@ -89,8 +89,7 @@ function cutVideos(channelSentenceWithBeeps, pathVideos, pathOriginalAudios, pat
                     pathCutVideos, vidOutName]);
                 
                 % Write the audios
-                % TODO: check for Take number
-                audiowrite([pathCutVideos, sentenceCode, '_Take1_Repetition', num2str(k), '.wav'], ssVideo(round(startIdx):round(endIdx), :), fs);
+                audiowrite([pathCutVideos, sentenceCode, '_Take', num2str(takeNum),'_Repetition', num2str(k), '.wav'], ssVideo(round(startIdx):round(endIdx), :), fs);
             end
 
         end

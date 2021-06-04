@@ -31,7 +31,6 @@ addpath('src')
 playSentencesForRecording('src/beepAudios');
 
 
-
 %% ------------------- POST-RECORDING SESSION -------------------
 %----------------------------------------------------------------
 
@@ -42,6 +41,7 @@ playSentencesForRecording('src/beepAudios');
 % repetition in a given folder.
 % You need to install ffmpeg for this (https://ffmpeg.org/)
 addpath('src');
+% channelSentenceWithBeeps -> 1 channel L, 2 channel R
 % cutVideos(channelSentenceWithBeeps, pathVideos, pathOriginalAudios, pathCutAudios)
 cutVideos(1, '', 'D:\Oldenburg\AVOLSA_Masked_Experiment\molsa\Stimuli\female\dithered\', 'src/cutVideos/');
 
@@ -57,6 +57,8 @@ addpath('sap-voicebox-master/voicebox'); % voicebox path
 % getAsyncScoresForAll(pathCutAudios);
 asyncTable = getAsyncScoresForAll('src/cutVideos/');
 % TODO: select the best
+
+
 
 %% Test Morse Encoder/Decoder
 % Takes many hours. It checks that the encoded signal can be decoded
