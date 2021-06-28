@@ -39,52 +39,31 @@ Choose a location with an uniform background. If you have the possibility, separ
 ### Endurance
 Batteries are very important, both for the equipment and the talker. A session with 150 sentences should last around 2 hours. Make sure that you have extra batteries for every piece of equipment. The battery of a Sony Alpha lasts around 30 minutes. If you can connect the camera with a power cord that would be ideal, otherwise bring extra batteries. The battery of the handheld recorder usually lasts longer than a recording session (over 20 hours). Check the same for the computer and lights (ideally all connected with power cords).
 
-Make pauses for the talker. You don't want your talker to be tired, as the task requires to be focused. Bring water/refreshments for the talker. To keep the same position of the talker in the chair/stool, you can use the display screen of the camera. By default, the display screen comes with a grid, usually by pressing the display button (DISP). You can use a non permanent marker and directly paint on the display screen where the eyes and the mouth should always be.
+Make pauses for the talker. You don't want your talker to be tired, as the task requires being focused. Bring water/refreshments for the talker. To keep the same position of the talker in the chair/stool, you can use the display screen of the camera. By default, the display screen comes with a grid, usually by pressing the display button (DISP). You can use a non-permanent marker and directly paint on the display screen where the eyes and the mouth should always be.
 
 ### Choose the right talker
 You should choose the right talker for you experiment. The most usual case is that you want a talker that is easy to speechread (lipread). Speech therapists and theater actors are a good choice.
 
-### Preparing the audio files for the recording session
-You will need to do some preparations for the recording session. You will add some "beep" signals to the original sentences in order to indicate to the talker that a sentence is coming. This is fairly easy, but you need to remember how you did it for the post-processing of the recordings. You can choose your own method for doing this. In the following example, three 200ms beeps, each separated by 1 second, are played before the sentence repetitions. The sentence is repeated four times. The corresponding function in this repository is "src/createSentencesWithBeeps.m". The following code has been written for Matlab:
-```MATLAB
-% Read audio file
-[ss, fs] = audioread('<audio filename>'); % '05126.wav' for example
-% Chose one stereo channel
-ss = ss(:,1);
 
-% Create three beeps signal
-durationBeep = 0.2; % seconds
-distanceBeeps = 1; % seconds
-amplitude = 0.2; % Amplitude of the beep signal
-beepFreq = 440; % Hz
-beep = amplitude * sin(2*pi*beepFreq*(0:1/fs:(durationBeep-1/fs)));
-% Add silence between beeps and concatenate beeps
-beepSignal = [beep zeros(1,fs*(distanceBeeps - durationBeep)) beep zeros(1,fs*(distanceBeeps - durationBeep)) beep zeros(1,fs*(distanceBeeps - durationBeep))];
-% sound(beepSignal, fs); % Check how the beep signal sounds
-
-% Add three beeps before sentence starts
-beep_ss = [beepSignal ss'];
-
-% Repeate the sentence four times
-beep_4ss = [beep_ss zeros(1,fs) ss' zeros(1,fs) ss' zeros(1,fs) ss'];
-
-% Check how the signal sounds
-%sound(beep_4ss, fs);
-
-% Store the signal to be used during the recording
-audiowrite(['<audio filename>','_withBeeps.wav'],  beep_4ss, fs);
-
-```
 
 ## Recording session
+To facilitate the recording session and the post-processing, there are scripts available. You need to follow the instructions in [NOTEBOOK_RECORDING.m](https://github.com/gerardllorach/audiovisualdubbedMST/blob/main/NOTEBOOK_RECORDING.m). We recommend that you read the Matlab script carefully, as there are some automated processes that speed up all the recording process.
+
+### Pre-processing
+During the recording session, the talker will listen to the sentences with cues. The talker will listen to something like this for a sentence: 
+   ```
+   -- Sentence code (morse) -- Beep -- Beep -- Beep -- Sentence -- Sentence -- Sentence -- Sentence.
+   ```
+   
+   The sentence code (morse) is a signal that encodes the id of the sentence. In the Matrix Sentence Test, the sentences can be coded with 5 digits, each digit representing a word for each category. For example, 01932.wav represents 0-Peter, 1-has, 9-seven, 3-red, 2-cars and 37872.wav represents 3-John, 7-buys, 8-twelve, 7-big, 2-cars. This sentence code signal is used for post-processing. It helps to cut the videos and to identify the sentences automatically (you won't have to check all the videos and identify each sentence).
+   
+   The beep signals are cues for the talker. They are also used in post-processing for cutting the videos in the right place. After the beep signals, there are four sentence repetitions. The first one is for the talker to listen and the following three are for the talker to speak simultaneously. There is a GUI in the scripts that helps with the recording process. The sentences can be selected and the audio reproduction is visually shown (the audio envelope is plotted and a cursor moves through it over time).
+   
+### Post-processing
+   Finding the sentences and selecting the best synchronous over a video file or several video files can be exhausting. The scripts provide an automatic process for cutting the videos, naming the cut videos with the sentence code and the take number, and for analyzing  the asynchrony of each sentence-take. It does not matter if you have multiple video files or just one, the script processes all videos that are inside a given folder.
 
 ### Testing
-Testing is most important. By testing the setup yourself, you will find out problems that should not appear during the recording session. Try to record 10-20 sentences. You can adjust the spacing between sentences, the beeps... Ideally, you should also check that the sentences are correctly recorded and that you can extract the final videos that are the most synchronous.
-
-### Playing the sentences
-Before playing each sentence, it is useful to display the code name and take of the sentence with a paper or a clapperboard, e.g., "15246 - Take 1". This way you can later find and distinguish each sentence in the videos by scrolling through the video. It is possible that you will have to repeat the recording of a sentence more than once. Therefore, there will be more than one take for some sentences (remember to write it down on the clapperboard).
-
-You can use a script to play the sentences or just an audio player, like VLC. The script "playSentencesForRecording.m" is prepared to play the sentences. You can select a specific sentence to play and keep going through all the sentences with a GUI. A log is written everytime you play a sentence with the date and time. This log might be useful when going through the videos, as you will be able to infer where the sentences are in the video sequences.
+Testing is most important. By testing the setup yourself, you will find out problems that should not appear during the recording session. Try to record 10-20 sentences and to get the final cut videos. You should also check that the sentences are correctly recorded and that you can extract the final videos that are the most synchronous.
 
 ### Instructions for the talker during the recording
 Keep the mouth closed before and after each sentence. Keep a neutral face. Do not change the prosody (intonation).
