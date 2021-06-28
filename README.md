@@ -2,7 +2,7 @@
 This is a repository with guidelines and code to create visual material for Matrix Sentence Test for speech audiometry. Please read the [scientific manuscript](https://arxiv.org/abs/1912.04700) first, if you haven't.
 
 ## Getting the audio-only material
-The audio-only material belongs to HörTech gGmbH. In principle, they can give you the material for research purposes for a limited period of time. You will find contact information on their [website](https://www.hoertech.de/en). The specific website for the MST can be found in this [link](https://www.hoertech.de/en/devices/intma.html). You can directly specify that you need it for creating an audiovisual MST and that the audio files are required.
+The audio-only material belongs to HörTech gGmbH. In principle, they can give you the material for research purposes for a limited period of time. You will find contact information on their [website](https://www.hoertech.de/). The specific website for the MST can be found in this [link](https://www.hoertech.de/en/devices/intma.html). You can directly specify that you need it for creating an audiovisual MST and that the audio files are required.
 
 The audio-only MST from HörTech will be mentioned as "original audio" throughout this guide.
 
