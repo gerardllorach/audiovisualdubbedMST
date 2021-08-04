@@ -24,11 +24,14 @@ function decodedSentenceCode = morseDecode(signal, fs)
 
 
         % Find the start and end of each column
+        % Clean dips in the signal created by constructive/destructive wave
+        % superposition
+        cleanedSignalEnvelope = cleanEnvelopeInterferences(signalEnvelope, fs);
         % Minimum separation between column beginnings: 15ms + 20ms
         % Start of columns
-        [~, locsStart] = findpeaks(diff(signalEnvelope), 'MinPeakDistance',fs*0.03, 'MinPeakHeight', 0.5);
+        [~, locsStart] = findpeaks(diff(cleanedSignalEnvelope), 'MinPeakDistance',fs*0.03, 'MinPeakHeight', 0.5);
         % End of columns
-        [~, locsEnd] = findpeaks(-diff(signalEnvelope), 'MinPeakDistance',fs*0.03, 'MinPeakHeight', 0.5);
+        [~, locsEnd] = findpeaks(-diff(cleanedSignalEnvelope), 'MinPeakDistance',fs*0.03, 'MinPeakHeight', 0.5);
         % Length of columns
         % If peak's length don't match, error is happening
         if (length(locsStart) ~= length(locsEnd))
@@ -37,8 +40,11 @@ function decodedSentenceCode = morseDecode(signal, fs)
                 figure
                 plot(signalFiltered);
                 hold on
-                plot(signalEnvelope);
+                plot(signalEnvelope, 'linewidth', 2);
+                plot(cleanedSignalEnvelope, 'linewidth', 3);
                 plot(diff(signalEnvelope));
+                scatter( locsStart, ones(1,length(locsStart)))
+                scatter( locsEnd, ones(1,length(locsEnd)))
                 title(['Freq band not decoded: ', num2str(freqBands(i)), ' Hz.']);
                 hold off
             continue;
@@ -51,10 +57,10 @@ function decodedSentenceCode = morseDecode(signal, fs)
             if (durationCodes(j) < dotDuration*0.5 | durationCodes(j) > dashDuration*1.5)
                 continue;
             % Dash
-            elseif (durationCodes(j) < dashDuration*1.1 & durationCodes(j) > dashDuration*0.9)
+            elseif (durationCodes(j) < dashDuration*1.1 & durationCodes(j) > dashDuration*0.70)
                 decodedMorse(end+1) = '-';
             % Dot
-            elseif (durationCodes(j) < dotDuration*1.1 & durationCodes(j) > dotDuration*0.75)
+            elseif (durationCodes(j) < dotDuration*1.1 & durationCodes(j) > dotDuration*0.70)
                 decodedMorse(end+1) = '.';
             end
         end
@@ -69,6 +75,7 @@ function decodedSentenceCode = morseDecode(signal, fs)
             plot(signalFiltered);
             plot(signalEnvelopeOri, 'Linewidth', 2)
             plot(signalEnvelope*0.5, 'Linewidth', 2);
+            plot(cleanedSignalEnvelope*0.5, 'Linewidth', 3);
             plot(diff(signalEnvelope));
             title(['Freq band not decoded: ', num2str(freqBands(i)), ' Hz.']);
             hold off
@@ -85,5 +92,37 @@ function decodedSentenceCode = morseDecode(signal, fs)
 %         hold off
 
     end
+    
+end
+
+
+% Clean dips in the signal envelope created by constructive/destructive wave superposition
+function cleanedEnv = cleanEnvelopeInterferences(signalEnvelope, fs)
+    globalVariables;
+    % dotDuration;
+    
+    % Signal envelope is 0s and 1s
+    % Sometimes the different frequencies interfere with each other.
+    % The duration of an interference should be shorter than the duration
+    % of a one/zero encoding, otherwise an interference could be confused
+    % with the encoding
+    interfDuration = round(fs*dotDuration/2);
+    % Constructive peaks
+    [~, locsConstructive] = findpeaks(signalEnvelope,'MaxPeakWidth', interfDuration);
+    % Remove constructive peaks
+    for i=1:length(locsConstructive)
+        idxPeak = locsConstructive(i);
+        signalEnvelope(1,idxPeak:(idxPeak+interfDuration)) = zeros(1,1+interfDuration);
+    end
+    
+    % Destructive peaks
+    [~, locsDestructive] = findpeaks(-signalEnvelope,'MaxPeakWidth', interfDuration);
+    % Remove destructive peaks
+    for i=1:length(locsDestructive)
+        idxPeak = locsDestructive(i);
+        signalEnvelope(1,idxPeak:(idxPeak+interfDuration)) = ones(1,1+interfDuration);
+    end
+    
+    cleanedEnv = signalEnvelope;
     
 end
