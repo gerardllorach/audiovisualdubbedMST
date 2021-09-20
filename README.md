@@ -20,7 +20,7 @@ The camera needs to record two audio inputs at the same time: one from the talke
 
 According to this setup, you will need the following cables: an XRL cable (female-male), two 3.5mm jacks (male-male), a 3.5mm jack splitter (1 male-2 female), and a mono-to-stereo 3.5mm jack (2 female-1 male). You will probably need an extension cable for the earphones (3.5mm jack male-female).
 
-![Audio Routing](audiorouting.jpg)
+![Audio Routing](img/audiorouting.jpg)
 
 The 3.5mm jack splitter and the mono-to-stereo 3.5mm jack are different cables. The first one duplicates a signal, whereas the second one creates a stereo mix from two mono signals. The cables look the same, but they are different inside and they are not interchangeable. 
 
