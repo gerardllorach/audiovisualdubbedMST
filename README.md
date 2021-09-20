@@ -52,7 +52,7 @@ Make pauses for the talker. You don't want your talker to be tired, as the task 
 You should choose the right talker for your experiment. The most usual case is that you want a talker that is easy to speechread (lipread). Speech therapists and theater actors are a good choice.
    
 ### Legal issues
-The talker should give your institution the image rights of the recorded material. You can find an [example (english)](docs/ImageRightsForm.docx) in this repository. Regarding the rights over the recorded speech, I am not sure if you can distribute it as the original audios from Hörtech gGmbH were used to create them. You should talk with HörTech gGmbH and seek legal advice about this topic.
+The talker should give your institution the image rights of the recorded material. You can find an [example here (English)](docs/ImageRightsForm.docx). Regarding the rights over the recorded speech, I am not sure if you can distribute it as the original audios from Hörtech gGmbH were used to create them. You should talk with HörTech gGmbH and seek legal advice about this topic.
 
 
 
