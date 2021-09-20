@@ -10,13 +10,15 @@ The audio-only MST from HörTech will be mentioned as "original audio" throughou
 You will need a computer, a camera, a microphone and probably a sound mixing table/handheld recorder. Each setup will depend on the equipment that you have available. We propose a setup with a mirrorless camera (sony alpha 7), a shotgun microphone and a handheld recorder (Zoom H6).
 
 ### Audio routing
-The camera needs to record two audio inputs at the same time: one from the talker (captured by the shotgun microphone) and another one from the computer, where the original audio is being played. Because most cameras have one audio input, the Zoom H6 will mix the captured audio and the computer audio. The line out of the Zoom H6 will be connected to the audio input of the camera. The shotun microphone will be connected to the Zoom H6 channel 1 and the computer audio to the Zoom H6 channel 2. The computer will have two audio outputs from the headphone output. You can achieve that with a jack splitter. One of the outputs will be connected to the Zoom H6, as mentioned before, and the other will be connected to the earphones that the talker will use. You can also use an external sound card to do that. The final connections should look like this:
+The camera needs to record two audio inputs at the same time: one from the talker (captured by the shotgun microphone) and another one from the computer, where the original audio is being played. Because most cameras have one audio input, the microphone audio and the computer audio will be stored in the left and rigth channel of the camera audio input. This will be done with a mono-to-stereo cable that mixes two mono signals into a stereo (Hosa YMM261). The shotun microphone will be connected to the Zoom H6 and the line out of the Zoom H6 will be connected to one of the audio inputs of the mono-to-stereo cable (Hosa YMM261). The computer will have two audio outputs from the headphone output. You can achieve that with a jack splitter. One of the outputs will be connected to remaining audio input of the mono-to-stereo cable (Hosa YMM261) and the other will be connected to the earphones that the talker will use. The final connections should look like this:
 - Microphone -> (XRL female -- XRL male) <- Zoom input channel 1
-- Computer audio output -> (3.5mm jack splitter male -- 3.5mm jack splitter female 1 -- 3.5mm jack male -- 6.35mm jack male) <- Zoom input channel 2
+- Zoom line out -> (3.5mm jack male -- 3.5mm jack male) <- Mono-to-stereo cable input 1
+- Computer audio output -> (3.5mm jack splitter male -- 3.5mm jack splitter female 1 -- 3.5mm jack male -- 3.5mm jack male) <- Mono-to-stereo cable input 2
 - Computer audio output -> (3.5mm jack splitter male -- 3.5mm jack splitter female 2) <- earphone to the talker
-- Zoom line out -> (3.5mm jack male -- 3.5mm jack male) <- Camera audio input
+- Mono-to-stereo cable output -> <- Camera audio input
 
-According to this setup, you will need the following cables: a XRL cable (female-male), a 3.5mm jack splitter (1 male-2 female), a jack from mini to normal (3.5mm jack male - 6.35mm jack male), and a 3.5mm jack (male-male). You will probably need an extension cable for the earphones (3.5mm jack male-female).
+
+According to this setup, you will need the following cables: a XRL cable (female-male), two 3.5mm jacks (male-male), a 3.5mm jack splitter (1 male-2 female), and a mono-to-stereo 3.5mm jack (2 female-1 male). You will probably need an extension cable for the earphones (3.5mm jack male-female).
 
 ### Recording settings
 - Camera:
@@ -28,6 +30,7 @@ According to this setup, you will need the following cables: a XRL cable (female
   · use a shotgun microphone (also called boom I think) or a cardioid microphone, close to the speaker (e.g., above the speaker or below at the height of the knees and outside the recording frame of the camera).
   · check out this video for mic setups: https://www.youtube.com/watch?v=cusxbkwyvQ4.
   · never let the audio signal go over -12 dB in the camera and in the handheld recorder.
+  · avoid background noise and try to get a clean recording. It will affect your asynchrony scores later.
 
 ### Location
 There will be the talker (person speaking the sentences) and the recording equipment (camera, handheld recorder, microphone, computer and lights). Choose a chair/stool for the talker that is comfortable and also forces the talker to sit with a straight back. Avoid using chairs with a high backrest, as it could appear in the video unintentionally.
@@ -47,7 +50,9 @@ You should choose the right talker for you experiment. The most usual case is th
 
 
 ## Recording session
-To facilitate the recording session and the post-processing, there are scripts available. You need to follow the instructions in [NOTEBOOK_RECORDING.m](https://github.com/gerardllorach/audiovisualdubbedMST/blob/main/NOTEBOOK_RECORDING.m). We recommend that you read the Matlab script carefully, as there are some automated processes that speed up all the recording process.
+The talker should keep the mouth closed before and after each sentence and keep the same place. He/she should keep a neutral face (not sad!) and look at the camera. Try that the prosody (intonation) is the same. Repeat the instructions now and then to the talker. 
+
+To facilitate the recording session and the post-processing, there are scripts available. You need to follow the instructions in [NOTEBOOK_RECORDING.m](https://github.com/gerardllorach/audiovisualdubbedMST/blob/main/NOTEBOOK_RECORDING.m). We recommend that you read the Matlab script carefully, as there are some automated processes that speed up all the recording process. 
 
 ### Pre-processing
 During the recording session, the talker will listen to the sentences with cues. The talker will listen to something like this for a sentence: 
@@ -64,6 +69,3 @@ During the recording session, the talker will listen to the sentences with cues.
 
 ### Testing
 Testing is most important. By testing the setup yourself, you will find out problems that should not appear during the recording session. Try to record 10-20 sentences and to get the final cut videos. You should also check that the sentences are correctly recorded and that you can extract the final videos that are the most synchronous.
-
-### Instructions for the talker during the recording
-Keep the mouth closed before and after each sentence. Keep a neutral face. Do not change the prosody (intonation).
