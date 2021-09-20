@@ -6,9 +6,15 @@
 function createSentencesWithBeeps(originalSentencesPath, beepSentencesPath)
 
   globalVariables;
+  globalPaths;
   
   % Get the filenames of the original audio
-  originalSentencesNames = dir(strcat(originalSentencesPath,'*.wav'));
+  originalSentencesNames = dir(strcat(originalSentencesPath,'/*.wav'));
+  if (size(originalSentencesNames,1) == 0)
+    msgbox(['Original sentences not found in ', originalSentencesPath, '*/.wav Please revise src/globalPaths.m']);
+    disp(['Original sentences not found in ', originalSentencesPath, '*/.wav Please revise src/globalPaths.m']);
+    return
+  end
 
   % Iterate the filenames
   for i = 1:length(originalSentencesNames)
@@ -18,7 +24,7 @@ function createSentencesWithBeeps(originalSentencesPath, beepSentencesPath)
     
     % If sentenceCode does not contain a sentence code ('84651')
     if (isnan(str2double(sentenceCode)))
-        disp(['Filename ', sentenceCode , ' is not correct, it should be 5 digits.']);
+        disp(['Filename ', sentenceCode , ' is not correct, it should be 5 digits. Skipping audio file.']);
         continue;
     end
 

@@ -4,6 +4,12 @@ function playSentencesForRecording(beepAudiosPath)
     addpath(beepAudiosPath);
     % Read all filenames
     audioFilenames = dir([beepAudiosPath,'/*.wav']);
+    % Check if files are found
+    if (size(audioFilenames,1) == 0)
+        msgbox(['Sentences with beeps not found in ', originalSentencesPath, '/*.wav Please revise src/globalPaths.m']);
+        disp(['Sentences with beeps not found in ', originalSentencesPath, '/*.wav Please revise src/globalPaths.m']);
+        return
+    end
     % Create GUI and functionalities
     startGUI(audioFilenames);
     

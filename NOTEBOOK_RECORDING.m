@@ -15,9 +15,10 @@
 % the three beeps, in order to be able to identify each sentence
 % programatically later.
 
-% createSentencesWithBeeps(originalAudiosPath, beepAudiosPath)
+% createSentencesWithBeeps(pathOriginalSentences, pathSentencesWithBeeps)
 addpath('src')
-createSentencesWithBeeps('D:\Oldenburg\AVOLSA_Masked_Experiment\molsa\Stimuli\female\dithered\', 'src/beepAudios/');
+globalPaths; % Define here all your paths.
+createSentencesWithBeeps(paths.OriginalSentences, paths.SentencesWithBeeps);
 
 
 %% -------------------   RECORDING SESSION -------------------
@@ -28,7 +29,8 @@ createSentencesWithBeeps('D:\Oldenburg\AVOLSA_Masked_Experiment\molsa\Stimuli\fe
 % an entry will be written to recordingLogs.txt with a date, time and
 % sentence code.
 addpath('src')
-playSentencesForRecording('src/beepAudios');
+globalPaths; % Define here all your paths.
+playSentencesForRecording(paths.SentencesWithBeeps);
 
 
 %% ------------------- POST-RECORDING SESSION -------------------
@@ -41,23 +43,31 @@ playSentencesForRecording('src/beepAudios');
 % repetition in a given folder.
 % You need to install ffmpeg for this (https://ffmpeg.org/)
 addpath('src');
+globalPaths; % Define here all your paths.
 % channelSentenceWithBeeps -> 1 channel L, 2 channel R
-% cutVideos(channelSentenceWithBeeps, pathVideos, pathOriginalAudios, pathCutAudios)
-cutVideos(1, '', 'D:\Oldenburg\AVOLSA_Masked_Experiment\molsa\Stimuli\female\dithered\', 'src/cutVideos/');
+% cutTakes(channelSentenceWithBeeps, pathRecordedRawVideos, pathOriginalSentences, pathCutTakes, videoFormat)
+cutTakes(1, paths.RecordedRawVideos, paths.OriginalSentences, paths.CutTakes, 'm4v');
 
 
 %% Check the asynchrony of the repetitions
-% For this section you need to download the VOICEBOX Matlab toolbox and 
-% reference the path
+% For this section you need to download the VOICEBOX Matlab toolbox
 % http://www.ee.ic.ac.uk/hp/staff/dmb/voicebox/voicebox.html
+% It is recommended that the audios of the recording session are denoised,
+% if background noise is present. It seems to improve the asynchrony
+% scores.
 close all
 addpath('src');
 addpath('sap-voicebox-master/voicebox'); % voicebox path
+globalPaths;
 
-% getAsyncScoresForAll(pathCutAudios);
-asyncTable = getAsyncScoresForAll('src/cutVideos/');
+% getAsyncScoresForAll(pathCutTakes);
+asyncTable = getAsyncScoresForAll(paths.CutTakes);
 % TODO: select the best
 
+
+
+%% Appendix
+return;
 
 
 %% Test Morse Encoder/Decoder
@@ -69,10 +79,18 @@ testMorse();
 % Test with a signal delayed 200ms
 addpath('src');
 addpath('sap-voicebox-master/voicebox');
-[ss, fs] = audioread('D:\Oldenburg\AVOLSA_Masked_Experiment\molsa\Stimuli\female\dithered\02064.wav');
+globalPaths;
+sentenceName = '02064.wav'
+[ss, fs] = audioread([paths.OriginalSentences, sentenceName]);
 delaySec = 0.2;
 ssA = [ss(:,1); zeros(round(delaySec*fs), 1)];
 ssA(:,2) = [zeros(round(delaySec*fs), 1) ; ss(:,1)]; % Delayed 200ms
 figure
 plot(1/fs*1:length(ssA), ssA)
-computeAsyncScore(ssA, fs, 1);
+computeAsyncScore(ssA, fs, 1, sentenceName);
+% Check asynScore with noisy delayed signal. It seem to affect quite a lot
+% (~0.02 async) if the recording was noisy, when comparing to the denoised
+% recording.
+noise = 0.5*max(ssA(:,2))*(rand(size(ssA,1),1) - 0.5)*2;
+ssA(:,2) = ssA(:,2) + noise;
+computeAsyncScore(ssA, fs, 1, sentenceName);

@@ -112,7 +112,7 @@ function cleanedEnv = cleanEnvelopeInterferences(signalEnvelope, fs)
     % Remove constructive peaks
     for i=1:length(locsConstructive)
         idxPeak = locsConstructive(i);
-        signalEnvelope(1,idxPeak:(idxPeak+interfDuration)) = zeros(1,1+interfDuration);
+        signalEnvelope(idxPeak:(idxPeak+interfDuration)) = zeros(1,1+interfDuration); % Does not matter if it is a column or row array. Alternatively you could use isrow(signalEnvelope)
     end
     
     % Destructive peaks
@@ -120,7 +120,7 @@ function cleanedEnv = cleanEnvelopeInterferences(signalEnvelope, fs)
     % Remove destructive peaks
     for i=1:length(locsDestructive)
         idxPeak = locsDestructive(i);
-        signalEnvelope(1,idxPeak:(idxPeak+interfDuration)) = ones(1,1+interfDuration);
+        signalEnvelope(idxPeak:(idxPeak+interfDuration)) = ones(1,1+interfDuration); % Does not matter if it is a column or row array. Alternatively you could use isrow(signalEnvelope)
     end
     
     cleanedEnv = signalEnvelope;

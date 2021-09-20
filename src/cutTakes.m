@@ -1,4 +1,4 @@
-function cutVideos(channelSentenceWithBeeps, pathVideos, pathOriginalAudios, pathCutVideos)
+function cutTakes(channelSentenceWithBeeps, pathVideos, pathOriginalAudios, pathCutVideos, videoFormat)
     % channelSentenceWithBeeps -> 1 channel L, 2 channel R
 
     close all
@@ -10,7 +10,14 @@ function cutVideos(channelSentenceWithBeeps, pathVideos, pathOriginalAudios, pat
     % timeCutAfterEnd
 
     % Read video files
-    videoFiles = dir([pathVideos, '*.mkv']);
+    videoFiles = dir([pathVideos, '*.', videoFormat]);
+    
+    % Check if files are found
+    if (size(videoFiles,1) == 0)
+        msgbox(['Video recordings not found in ', pathVideos, '*.', videoFormat, ' Please revise src/globalPaths.m']);
+        disp(['Video recordings not found in ', pathVideos, '*.', videoFormat, ' Please revise src/globalPaths.m']);
+        return
+    end
 
     % Iterate through video files
     for i = 1:length(videoFiles)
@@ -28,6 +35,18 @@ function cutVideos(channelSentenceWithBeeps, pathVideos, pathOriginalAudios, pat
         % Correlation
         [acor, lag] = xcorr(ss, beepSignal);
         [maxCorr, ~] = max(abs(acor));
+        % If maxCorr is low, probably no beeps are present, likely because
+        % choosing the audio channel without beeps
+        if (maxCorr < 300)
+            disp('WARNING: correlation with beeps signal is low, probably because no beeps are present. Try to change the channelSentenceWithBeeps, which indicates if the audio channel with beeps is the left or right one.');
+            subplot(2,1,1)
+            plot(ssVideo(:,channelSentenceWithBeeps));
+            title('Chosen audio channel (should contain three beep signal)')
+            subplot(2,1,2)
+            plot(ssVideo(:, mod(channelSentenceWithBeeps,2)+1));
+            title('Speakers microphone audio (without three beep signal)');
+            return;
+        end
         % Find peaks (separated by at least 8 seconds, i.e. each take lasts 3*4 seconds + pause in between)
         [peaks, locs] = findpeaks(abs(acor), lag, 'MinPeakDistance',fs*8, 'MinPeakHeight', maxCorr*0.8);
         findpeaks(abs(acor), lag, 'MinPeakDistance',fs*8, 'MinPeakHeight', maxCorr*0.8); % Plot the peaks

@@ -68,9 +68,11 @@ hold off
 %plot( frame2sec * (1:length(asyncOverTime)), asyncOverTime, 'LineWidth', 2, 'Color', 'red');
 title({['Asynchrony over time for ', sentenceName],...
     ['Asynchrony score: ', num2str(asyncScore, '%.3f'),'s '],...
-    ['Video ahead: ',num2str(maxVidAhead, '%.3f'), 's. Video behind: ', num2str(maxVidBehind, '%.3f'), 's.']});
+    ['Video ahead: ',num2str(maxVidAhead, '%.3f'), 's. Video behind: ', num2str(maxVidBehind, '%.3f'), 's.']},...
+    'Interpreter', 'none');
 ylabel('Asynchrony in seconds');
 xlabel('Time in seconds');
+ylim([-0.3 0.3]);
 refline(0,0);
 hline = refline(0,0.2);
 hline.LineWidth = 0.3;
