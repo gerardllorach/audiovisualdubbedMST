@@ -20,6 +20,10 @@ The camera needs to record two audio inputs at the same time: one from the talke
 
 According to this setup, you will need the following cables: a XRL cable (female-male), two 3.5mm jacks (male-male), a 3.5mm jack splitter (1 male-2 female), and a mono-to-stereo 3.5mm jack (2 female-1 male). You will probably need an extension cable for the earphones (3.5mm jack male-female).
 
+![Audio Routing](audiorouting.jpg)
+
+The 3.5mm jack splitter and the mono-to-stereo 3.5mm jack are different cables. The first one duplicates a signal, whereas the second one creates a stereo mix from two mono signals. The cables look the same, but they are actually different inside and they are not interchangeable. 
+
 ### Recording settings
 - Camera:
    · record at 50 or 60 fps, 1080p (full HD). At 50 fps, one frame equals to 20ms. Ideally, the camera records in mp4 or some other standard format.
