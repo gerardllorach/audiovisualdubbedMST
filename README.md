@@ -52,7 +52,7 @@ Make pauses for the talker. You don't want your talker to be tired, as the task 
 You should choose the right talker for your experiment. The most usual case is that you want a talker that is easy to speechread (lipread). Speech therapists and theater actors are a good choice.
    
 ### Legal issues
-The talker should give your institution the image rights of the recorded material. You can find an [example (english)](docs/ImageRightsForm.docx) in this repository. Regarding the rights over the recorded speech, I am not sure if you can distribute it as the original audios from Hörtech gGmbH were used to create them. You should talk with HörTech gGmbH and seek legal advice about this topic.
+The talker should give your institution the image rights of the recorded material. You can find an [example here (English)](docs/ImageRightsForm.docx). Regarding the rights over the recorded speech, I am not sure if you can distribute it as the original audios from Hörtech gGmbH were used to create them. You should talk with HörTech gGmbH and seek legal advice about this topic.
 
 
 
@@ -76,5 +76,14 @@ During the recording session, the talker will listen to the sentences with cues.
 
 ### Testing
 Testing is most important. By testing the setup yourself, you will find out problems that should not appear during the recording session. Try to record 10-20 sentences and to get the final cut videos. You should also check that the sentences are correctly recorded and that you can extract the final videos that are the most synchronous.
+   
+   
+# References
+Llorach, G., Kirschner, F., Grimm, G., Zokoll, M.A., Wagener, K.C. and Hohmann, V., 2021. Development and evaluation of video recordings for the OLSA matrix sentence test. International Journal of Audiology, pp.1-11.
+   
+VOICEBOX, written by Mike Brookes, Department of Electrical & Electronic Engineering, Imperial College, Exhibition Road, London SW7 2BT, UK.
+   
+# License
+GNU GENERAL PUBLIC LICENSE, Version 2, June 1991
 
 
