@@ -107,6 +107,9 @@ function cutTakes(channelSentenceWithBeeps, pathVideos, pathOriginalAudios, path
                     ' -ss ', num2str(floor(startTime*1000)) ,'ms -t ', num2str(floor(vidDuration*1000)) ,'ms ',...
                     pathCutVideos, vidOutName]);
                 
+                disp(status)
+                disp(cmdout)
+                
                 % Write the audios
                 audiowrite([pathCutVideos, sentenceCode, '_Take', num2str(takeNum),'_Repetition', num2str(k), '.wav'], ssVideo(round(startIdx):round(endIdx), :), fs);
             end
