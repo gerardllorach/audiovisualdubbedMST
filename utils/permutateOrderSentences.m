@@ -11,14 +11,13 @@ for numTries = 1:1000
             numericalList(i,j) = num;
        end
     end
-    % 
+    % Combination were no words are said consecutively
     if(sum(sum(diff(numericalList)==0)) == 0)
-        disp('A combination was found without consecutive words');
         permutedList = inputList;
         return;
     end
 end
-
+disp('A combination was not found without consecutive words');
 
 end
 

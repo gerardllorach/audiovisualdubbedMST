@@ -18,6 +18,7 @@ paths.CutTakes = 'src/cutVideos/';
 % selected from the best synchronous videos (removed videos with smiles and
 % unwated facial expressions)
 paths.FinalVideos = 'C:\Users\gllor\Desktop\Oldenburg\AVMST\AVMST_French\videos\female\';
+%paths.FinalVideos = 'C:\Users\gllor\Desktop\Oldenburg\AVMST\AVMST_French\molsa\Stimuli\female\dithered\';
 
 % Folder where the lists are stored
-paths.SentenceLists = '';
+paths.SentenceLists = 'C:\Users\gllor\Desktop\Oldenburg\AVMST\AVMST_French\molsa\Stimuli\female\testlist\';

@@ -1,4 +1,4 @@
-function [lists, listTable] = createSentenceLists(pathVideos,extension, numSentencesList, numLists)
+function [lists, listTable] = createSentenceLists(pathVideos,extension, numSentencesPerList, numLists)
 % Create a table with filenames
 filenames = dir([pathVideos, '*', extension]);
 
@@ -34,15 +34,20 @@ lists = {};
 for xx = 1:numLists % Number of lists
     mm = zeros(10,5);
     % While operator
-    wordNum = 1;
+    wordNumIndex = 1;
     breakFlag = 0;% Double break
-    discardedSentences = cell(1,numSentencesList);% At each position, store the sentences that do not fit with the previous sentence
+    discardedSentences = cell(1,numSentencesPerList);% At each position, store the sentences that do not fit with the previous sentence
     % Initialize list
-    for ii = 1:numSentencesList
+    for ii = 1:numSentencesPerList
        lists(xx,ii) = {''}; 
     end
-    while (wordNum < numSentencesList+1)
-    	
+    % Random permutation of word number (to compensate for semi-balanced
+    % lists)
+    ww = randperm(10*ceil(numSentencesPerList/10), numSentencesPerList);
+    
+    while (wordNumIndex < numSentencesPerList+1)
+    	wordNum = ww(wordNumIndex);
+        
         % Get sentences starting with a given number
         availableSentences = listTable(listTable{:,'PosOne'} == mod((wordNum-1),10) & listTable{:,'TimesUsed'} == 0 & listTable{:,'NoCombination'} == 0,:);
         % Random order of sentences
@@ -59,10 +64,10 @@ for xx = 1:numLists % Number of lists
             count = 0;
             
             for i=1:5
-                if(mm(str2num(sentenceCode(i))+1, i) == ceil(numSentencesList/10))
+                if(mm(str2num(sentenceCode(i))+1, i) == ceil(numSentencesPerList/10))
                     %disp("Word was used already in that category");
                     count = count + 1;
-                    discardedSentences(j, wordNum) = {sentenceCode};
+                    discardedSentences(j, wordNumIndex) = {sentenceCode};
                     % Add NoCombination = 1 to listTable
                     listTable(ismember(listTable{:,'Filename'},sentenceCode),'NoCombination') = {1};                    break;
                 end
@@ -85,32 +90,32 @@ for xx = 1:numLists % Number of lists
         % Dead end
         if (ismember(selCode, '00000'))
            % Unmark current available
-           for dd = 1:size(discardedSentences(:,wordNum), 1)
-               if (isa(discardedSentences{dd,wordNum},'double'))
+           for dd = 1:size(discardedSentences(:,wordNumIndex), 1)
+               if (isa(discardedSentences{dd,wordNumIndex},'double'))
                    continue;
                end
                %listTable(ismember(listTable{:,'Filename'},discardedSentences{dd,wordNum}),'NoCombination') = {0};
                listTable(listTable{:,'PosOne'} == mod((wordNum-1),10),'NoCombination') = {0};
            end
-           discardedSentences(:,wordNum) = {''};
+           discardedSentences(:,wordNumIndex) = {''};
            % Reduce word number
-           wordNum = wordNum -1;
-           if (wordNum == 0)
-               disp(["No more combinations available. ", num2str(size(lists, 1)), ' lists found.']);
+           wordNumIndex = wordNumIndex -1;
+           if (wordNumIndex == 0)
+               disp(['No more combinations available. ', num2str(size(lists, 1)-1), ' lists found.']);
                % Remove last row of list
                lists(xx,:) = [];
                return;
            end
            % Mark current unavailable due to path
-           for dd = 1:size(discardedSentences(:,wordNum), 1)
-               if (isa(discardedSentences{dd,wordNum},'double'))
+           for dd = 1:size(discardedSentences(:,wordNumIndex), 1)
+               if (isa(discardedSentences{dd,wordNumIndex},'double'))
                    continue;
                end
-               listTable(ismember(listTable{:,'Filename'},discardedSentences{dd,wordNum}),'NoCombination') = {1};
+               listTable(ismember(listTable{:,'Filename'},discardedSentences{dd,wordNumIndex}),'NoCombination') = {1};
            end
            % Remove from matrix and list
-           prevCode = lists{xx,wordNum};
-           lists(xx,wordNum) = {''};
+           prevCode = lists{xx,wordNumIndex};
+           lists(xx,wordNumIndex) = {''};
            % Mark prevCode as unavailable
            listTable(ismember(listTable{:,'Filename'},prevCode),'NoCombination') = {1};
            % Remove from the matrix
@@ -137,10 +142,10 @@ for xx = 1:numLists % Number of lists
         % Mark it on the table
         listTable(ismember(listTable{:,'Filename'}, {selCode}),'TimesUsed') = {1};
         % Store it in list
-        lists(xx,wordNum) = {selCode};
+        lists(xx,wordNumIndex) = {selCode};
         % Go for next sentence
         % Add to wordNum
-        wordNum = wordNum + 1;
+        wordNumIndex = wordNumIndex + 1;
         
         % Display up and downs
         %disp(strrep(cell2mat(list20(xx,:)), extension,''));
