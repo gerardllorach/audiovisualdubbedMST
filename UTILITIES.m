@@ -1,5 +1,6 @@
 %% UTILITIES
-% Extra scripts that can help with the material
+% Extra scripts that can help with the material and the experimental
+% testing
 %% Clean filenames
 % Execute this script to change the name of the files.
 addpath('src');
@@ -30,26 +31,47 @@ globalPaths; % paths.FinalVideos
 [uniqueLists, listTable] = createSentenceLists(paths.FinalVideos, 'mp4', 9, 20);
 % The different combinations that are being tested are printed in the command window.
 
-%% Combine lists
-% From the lists found, create bigger lists. In the previous function, each
-% sentence is used only once, therefore we can combine lists together.
-% Find the best combination between the existing lists (each word should
-% appear and repetitions should be avoided).
-[combList, remainLists] = createTwoListBestCombination(uniqueLists);
-% If there are more lists that remain, using them is smart, as the
-% sentences used there are not present in the previous list. Once you
-% store the previous list, you use this line to create another list.
-%[combList, remainLists] = createTwoListBestCombination(remainLists);
+    %% Combine lists
+    % From the lists found, create bigger lists. In the previous function, each
+    % sentence is used only once, therefore we can combine lists together.
+    % Find the best combination between the existing lists (each word should
+    % appear and repetitions should be avoided).
+    [combList, remainLists] = createTwoListBestCombination(uniqueLists);
+    % If there are more lists that remain, using them is smart, as the
+    % sentences used there are not present in the previous list. Once you
+    % store the previous list, you use this line to create another list.
+    %[combList, remainLists] = createTwoListBestCombination(remainLists);
 
-%% Add two sentences to a list
-% If the sentences you have available are not enough to make combinations
-% where each word appears once, you might want to add manually sentences
-listPlusTwo = addTwoSentencesToList(listTable, combList); % Computation expense: totalNumSenteces x totalNumSentences
-wordRepetitionMatrix = calcMatrixWordRepetitions(listPlusTwo, zeros(10,5));
+    %% Add two sentences to a list
+    % If the sentences you have available are not enough to make combinations
+    % where each word appears once, you might want to add manually sentences
+    listPlusTwo = addTwoSentencesToList(listTable, combList); % Computation expense: totalNumSenteces x totalNumSentences
+    wordRepetitionMatrix = calcMatrixWordRepetitions(listPlusTwo, zeros(10,5));
 
-%% Randomize order of the sentences
-% Make that the same word is not consecutively used
-permutedList = permutateOrderSentences(listPlusTwo);
+    %% Randomize order of the sentences
+    % Make that the same word is not consecutively used
+    permutedList = permutateOrderSentences(listPlusTwo);
+
+    %% Write 18+2 list in a file
+    numList = 1;
+    writeSentenceListToFile(permutedList, numList, paths.SentenceLists)
+
+
+    %% Semibalanced creation script
+    % Automatically execute past scripts to generate several lists
+    numLists = 20;
+    numList = 1;
+    while (numList < numLists)
+        [remainLists, listTable] = createSentenceLists(paths.FinalVideos, 'mp4', 9, 20);
+        while (size(remainLists,1) > 1)
+            [combList, remainLists] = createTwoListBestCombination(remainLists);
+            listPlusTwo = addTwoSentencesToList(listTable, combList);
+            permutedList = permutateOrderSentences(listPlusTwo);
+            writeSentenceListToFile(permutedList, numList, paths.SentenceLists);
+            numList = numList + 1;
+        end
+    end
+    
 
 %% Write the list in a file
 % Check how many lists are available
