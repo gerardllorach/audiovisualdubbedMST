@@ -2,6 +2,7 @@ function [lists, listTable] = createSentenceLists(pathVideos,extension, numSente
 % Create a table with filenames
 filenames = dir([pathVideos, '*', extension]);
 
+
 % Table variables
 varTypes = ["string","double","double", "double","double","double","double", "double"];
 varNames = ["Filename","TimesUsed","NoCombination","PosOne", "PosTwo", "PosThree",...
