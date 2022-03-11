@@ -13,21 +13,13 @@ ssRecorded = signal(:, otherChannel);
 % Check inside the v_spgrambw. Line 36
 frame2sec = 0.45/200; % tinc = 0.45/BW = window increments; BW = bandwidth in Hz = 200;
 
-% Plot mel spectrogram
-% imagesc(T,F,melSpecOriginal');
-% title('Mel spectogram');
-% set(gca,'YDir','normal');
-% ylabel('Mel frequency');
-% xlabel('Time in secods');
-
-
 
 % Compute Dynamic Time Warping
 % https://www.mathworks.com/help/signal/ref/dtw.html
 [dist,ix,iy] = dtw( melSpecRecorded', melSpecOriginal');
 
 
-% Compute asynchrony over time (turn the warping path 45บ, so it only represents
+% Compute asynchrony over time (turn the warping path 45ยบ, so it only represents
 % asynchrony
 asyncOverTime = (iy - ix)*frame2sec;
 
