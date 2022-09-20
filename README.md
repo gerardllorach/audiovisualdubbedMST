@@ -1,5 +1,10 @@
 # How to create video material for the Matrix Sentence Test
-This is a repository with guidelines and code to create visual material for the Matrix Sentence Test for speech audiometry. Please read the [scientific manuscript](https://www.tandfonline.com/doi/full/10.1080/14992027.2021.1930205) first, if you haven't.
+
+This is a repository with guidelines and code to create visual material for the Matrix Sentence Test or any other audio-only speech material. If you want to dub audio material with video recordings you are in the right place. The code and guidelines were written by Gerard Llorach and Loïc Le Rhun.
+
+The asynchrony score calculation, suggested by Bernd Meyer, is based on the source code written by Frederike Kirschner and Giso Grimm and used uses the library developed by Mike Brookes (VOICEBOX) to calculate the mel spectrograms. The method and guidelines to dub audio material with video recordings are based on the work of [Llorach et al. (2022)](https://www.tandfonline.com/doi/full/10.1080/14992027.2021.1930205), supervised by Giso Grimm and Volker Hohmann.
+
+Licensed under GNU GENERAL PUBLIC LICENSE, Version 2, June 1991
 
 ## Getting the audio-only material
 The audio-only material belongs to HörTech gGmbH. In principle, they can give you the material for research purposes for a limited period. You will find contact information on their [website](https://www.hoertech.de/). The specific website for the MST can be found in this [link](https://www.hoertech.de/en/devices/intma.html). You can directly specify that you need it for creating an audiovisual MST and that the audio files are required.
@@ -79,11 +84,7 @@ Testing is most important. By testing the setup yourself, you will find out prob
    
    
 # References
-Llorach, G., Kirschner, F., Grimm, G., Zokoll, M.A., Wagener, K.C. and Hohmann, V., 2021. Development and evaluation of video recordings for the OLSA matrix sentence test. International Journal of Audiology, pp.1-11.
+Llorach, G., Kirschner, F., Grimm, G., Zokoll, M.A., Wagener, K.C. and Hohmann, V., 2022. Development and evaluation of video recordings for the OLSA matrix sentence test. International Journal of Audiology, pp.1-11.
    
 VOICEBOX, written by Mike Brookes, Department of Electrical & Electronic Engineering, Imperial College, Exhibition Road, London SW7 2BT, UK.
-   
-# License
-GNU GENERAL PUBLIC LICENSE, Version 2, June 1991
-
 
