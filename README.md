@@ -4,6 +4,8 @@ This is a repository with guidelines and code to create visual material for the 
 
 The asynchrony score calculation, suggested by Bernd Meyer, is based on the source code written by Frederike Kirschner and Giso Grimm and used uses the library developed by Mike Brookes (VOICEBOX) to calculate the mel spectrograms. The method and guidelines to dub audio material with video recordings are based on the work of [Llorach et al. (2022)](https://www.tandfonline.com/doi/full/10.1080/14992027.2021.1930205), supervised by Giso Grimm and Volker Hohmann.
 
+To understand how the asynchrony calculation works, you can check out this python notebook comparing the cross-correlation and the method used here (DTW): https://colab.research.google.com/drive/1ljsQSZxHgD-R7tG4cR6vcwV_h-OxfBGB?usp=sharing
+
 Licensed under GNU GENERAL PUBLIC LICENSE, Version 2, June 1991
 
 ## Getting the audio-only material
